@@ -1,0 +1,21 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "Alistair",
+    "DeepSeek",
+    "Flora",
+    "florist",
+    "serverless",
+    "upselling",
+    "Vercel",
+    "vercelignore",
+    "WeChat"
+  ],
+  "ignorePaths": [
+    ".env",
+    ".vercel",
+    "node_modules",
+    "assets/*.png"
+  ]
+}

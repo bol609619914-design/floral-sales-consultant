@@ -1,0 +1,8 @@
+.env
+node_modules/
+.DS_Store
+.vercel/
+assets/flora-ai-icon.png
+assets/flora-ai-icon-256.png
+assets/flora-bouquet-icon-source.png
+.vercel

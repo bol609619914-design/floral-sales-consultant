@@ -1,0 +1,7 @@
+.env
+node_modules
+.DS_Store
+package.json
+dev-server.js
+assets/flora-ai-icon.png
+assets/flora-bouquet-icon-source.png
