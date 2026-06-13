@@ -1,5 +1,7 @@
 # Flora AI
 
+![Flora AI 项目预览](assets/project-preview.png)
+
 Flora AI 是一个面向花店导购的 AI 话术培训工作台。它把常见花礼销售场景、花材推荐、花语解释、搭配逻辑、避坑提醒和导购话术整合到一个可直接使用的前端应用里，帮助新导购更快掌握“该推荐什么、为什么推荐、应该怎么说”。
 
 项目采用轻量架构：单页前端负责训练界面和场景知识库，Vercel Serverless Function 负责代理 DeepSeek API 请求，避免将 API Key 暴露到浏览器端。
