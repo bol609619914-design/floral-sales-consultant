@@ -68,9 +68,9 @@
             transition: opacity 0.8s ease, visibility 0.8s ease;
         }
         .splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+        .splash.hide * { animation: none !important; }
         .splash-brand {
             text-align: center;
-            opacity: 1; transform: translateY(0) scale(1);
             animation: splashIn 1s cubic-bezier(0.22, 0.61, 0.36, 1);
         }
         .splash-brand h1 {
@@ -84,7 +84,7 @@
         .splash-brand .splash-line {
             width: 40px; height: 1.5px; background: var(--sage);
             margin: 14px auto 0; border-radius: 1px;
-            animation: lineGrow 0.8s 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+            animation: lineGrow 0.8s 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
         }
         .splash-brand .splash-sub {
             font-size: 9px; color: var(--text-muted); letter-spacing: 3px; margin-top: 12px;
@@ -497,7 +497,7 @@
         .msg { position: relative; }
 
         /* ---- Animations ---- */
-        @keyframes splashIn  { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes splashIn  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes lineGrow   { from { width: 0; } to { width: 40px; } }
         @keyframes fadeIn     { from { opacity: 0; } to { opacity: 1; } }
         @keyframes shellIn    { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
