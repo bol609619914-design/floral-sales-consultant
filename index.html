@@ -111,7 +111,11 @@
         }
         @media (max-width: 767px) {
             .app-shell.desktop { display: none; }
-            .app-shell.mobile  { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+            .app-shell.mobile  {
+                display: flex; flex-direction: column;
+                height: 100vh; height: 100dvh;
+                overflow: hidden;
+            }
         }
 
         /* ---- Glass ---- */
@@ -447,8 +451,10 @@
         }
 
         /* Content Area */
-        .mobile .mobile-content { overflow-y: auto; padding: 8px 12px 12px; display: flex; flex-direction: column; gap: 10px; }
-        .mobile .mobile-content.grow { flex: 1; min-height: 0; }
+        .mobile .mobile-content {
+            flex: 1; min-height: 0; overflow-y: auto;
+            padding: 8px 12px 12px; display: flex; flex-direction: column; gap: 10px;
+        }
         .mobile .mobile-content::-webkit-scrollbar { display: none; }
 
         /* Mobile Flower Cards */
@@ -710,7 +716,7 @@
         <button class="coach-action" onclick="clearChat()" title="清空对话">清空</button>
     </div>
 
-    <div class="mobile-content grow" id="mobileTabChat" style="display:flex;">
+    <div class="mobile-content" id="mobileTabChat" style="display:flex;">
         <div class="msg ai">
             <div class="msg-bubble">
                 欢迎使用话术培训系统。<br><br>
