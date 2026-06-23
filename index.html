@@ -102,7 +102,8 @@
         .petal svg { width: 100%; height: 100%; }
 
         /* ---- App Shell ---- */
-        .app-shell { position: relative; z-index: 1; display: none; min-height: 100vh; }
+        .app-shell { position: relative; z-index: 1; display: none; min-height: 100vh; opacity: 0; }
+        .app-shell.ready { opacity: 1; transition: opacity 0.5s ease; }
 
         @media (min-width: 768px) {
             .app-shell.desktop { display: flex; }
@@ -132,10 +133,7 @@
         }
 
         /* ---- Desktop Layout ---- */
-        .desktop {
-            display: flex; padding: 18px; gap: 18px; height: 100vh; align-items: stretch;
-            animation: shellIn 0.6s 0.2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-        }
+        .desktop { display: flex; padding: 18px; gap: 18px; height: 100vh; align-items: stretch; }
         .desktop .sidebar-left  { width: 260px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; }
         .desktop .main-content  { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .desktop .sidebar-right { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -500,7 +498,6 @@
         @keyframes splashIn  { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes lineGrow   { from { width: 0; } to { width: 40px; } }
         @keyframes fadeIn     { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes shellIn    { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes msgIn      { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes cardIn     { from { opacity: 0; transform: translateY(18px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes breathe    { 0%,100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 0.9; transform: scale(1.15); } }
@@ -1402,6 +1399,11 @@ function updateAllUI() {
 function initSplash() {
     const splash = document.getElementById('splashScreen');
     if (!splash) return;
+    // 先让应用在飞溅画面后面淡入（滚动条变化被遮住，用户看不到）
+    setTimeout(() => {
+        document.querySelectorAll('.app-shell').forEach(el => el.classList.add('ready'));
+    }, 1400);
+    // 再淡出飞溅画面
     setTimeout(() => { splash.classList.add('hide'); }, 1800);
     setTimeout(() => { splash.remove(); }, 2600);
 }
