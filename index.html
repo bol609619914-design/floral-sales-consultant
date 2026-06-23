@@ -70,7 +70,8 @@
         .splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
         .splash-brand {
             text-align: center;
-            animation: splashIn 1s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+            opacity: 1; transform: translateY(0) scale(1);
+            animation: splashIn 1s cubic-bezier(0.22, 0.61, 0.36, 1);
         }
         .splash-brand h1 {
             font-size: 32px; font-weight: 800; letter-spacing: 4px;
@@ -83,7 +84,7 @@
         .splash-brand .splash-line {
             width: 40px; height: 1.5px; background: var(--sage);
             margin: 14px auto 0; border-radius: 1px;
-            animation: lineGrow 0.8s 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+            animation: lineGrow 0.8s 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
         }
         .splash-brand .splash-sub {
             font-size: 9px; color: var(--text-muted); letter-spacing: 3px; margin-top: 12px;
