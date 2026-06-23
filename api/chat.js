@@ -22,19 +22,8 @@ module.exports = async function handler(req, res) {
 
   const scene = body.scene || null;
   const flowerRef = Array.isArray(body.flowerRef) ? body.flowerRef.slice(0, 20) : [];
-  const scenes = Array.isArray(body.scenes) ? body.scenes.slice(0, 12) : [];
   const promptContext = {
     currentScene: scene,
-    availableScenes: scenes.map((item) => ({
-      id: item.id,
-      name: item.name,
-      brief: item.brief,
-      customerAsk: item.customerAsk,
-      flowers: item.flowers,
-      scripts: item.scripts,
-      tips: item.tips,
-      avoid: item.avoid
-    })),
     flowerReference: flowerRef
   };
 
@@ -55,11 +44,21 @@ module.exports = async function handler(req, res) {
             content: [
               '你是 Flora AI，面向花店导购的中文销售话术教练。',
               '你的任务是根据场景、花材库和用户描述，给出可直接用于门店沟通的建议。',
-              '回复必须简洁、具体、可执行，避免空泛鸡汤。',
-              '优先输出：场景判断、推荐花材、顾客话术、追问问题、避坑提醒。',
-              '如果用户在练习话术，你可以扮演顾客继续追问，也可以点评并改写。',
-              '不要编造医疗功效，不要建议违法或冒犯习俗的表达。',
-              '用 Markdown 回复，最多 5 个小段落。'
+              '',
+              '回复原则：',
+              '- 简洁具体，可直接用于销售对话，避免空泛鸡汤',
+              '- 优先输出：场景判断、推荐花材、顾客话术、追问问题、避坑提醒',
+              '- 花材推荐时说明花语和推荐理由，让导购能说服顾客',
+              '- 话术要自然口语化，像真正在和顾客聊天',
+              '',
+              '互动模式：',
+              '- 如果用户在练习话术，你可以扮演顾客继续追问，也可以点评并改写用户的话术',
+              '- 如果用户描述了顾客情况，先判断场景再给建议',
+              '- 如果用户问花语或搭配，结合当前场景给出有针对性的建议',
+              '',
+              '边界：',
+              '- 不要编造医疗功效，不要建议违法或冒犯习俗的表达',
+              '- 用 Markdown 格式回复，最多 5 个小段落'
             ].join('\n')
           },
           {
