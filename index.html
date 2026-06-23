@@ -389,92 +389,186 @@
 
         /* ---- Mobile ---- */
         .mobile .mobile-header {
-            padding: 16px 14px 10px; text-align: center; flex-shrink: 0;
+            padding: 14px 16px 10px; text-align: center; flex-shrink: 0;
             position: relative;
         }
         .mobile .mobile-header::after {
-            content: ''; position: absolute; bottom: 0; left: 25%; right: 25%;
-            height: 1px; background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            content: ''; position: absolute; bottom: 0; left: 20%; right: 20%;
+            height: 1px; background: linear-gradient(90deg, transparent, var(--glass-border-strong), transparent);
         }
         .mobile .mobile-header h1 {
-            font-size: 16px; font-weight: 800; letter-spacing: 2px;
+            font-size: 17px; font-weight: 800; letter-spacing: 3px;
             background: linear-gradient(135deg, var(--text) 0%, var(--sage) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .mobile .mobile-header .tagline { font-size: 8px; color: var(--text-muted); letter-spacing: 3px; }
+        .mobile .mobile-header .tagline { font-size: 8px; color: var(--text-muted); letter-spacing: 4px; margin-top: 2px; }
 
+        /* Scene Strip */
+        .mobile .scene-strip-wrapper { position: relative; flex-shrink: 0; }
         .mobile .scene-strip {
-            display: flex; overflow-x: auto; gap: 7px;
-            padding: 6px 12px 10px; scroll-snap-type: x mandatory; flex-shrink: 0;
+            display: flex; overflow-x: auto; gap: 8px;
+            padding: 8px 14px 10px; scroll-snap-type: x mandatory; flex-shrink: 0;
         }
         .mobile .scene-strip::-webkit-scrollbar { display: none; }
+        .mobile .scene-strip-wrapper::after {
+            content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 28px;
+            background: linear-gradient(90deg, transparent, rgba(245,237,228,0.9));
+            pointer-events: none; z-index: 1;
+        }
         .mobile .scene-chip {
             flex-shrink: 0; scroll-snap-align: start;
-            display: flex; align-items: center; gap: 6px;
-            padding: 9px 14px; border-radius: var(--radius-md);
+            display: flex; align-items: center; gap: 7px;
+            padding: 10px 14px; border-radius: var(--radius-md);
             border: 1px solid var(--glass-border); background: var(--glass-bg);
             backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
             cursor: pointer; transition: all var(--transition);
             font-family: inherit; color: var(--text);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
         }
         .mobile .scene-chip .chip-bar {
-            width: 2px; height: 16px; border-radius: 2px; flex-shrink: 0;
+            width: 3px; height: 18px; border-radius: 2px; flex-shrink: 0;
         }
-        .mobile .scene-chip .chip-label { font-size: 11px; font-weight: 650; white-space: nowrap; letter-spacing: 0.3px; }
+        .mobile .scene-chip .chip-label { font-size: 12px; font-weight: 650; white-space: nowrap; letter-spacing: 0.5px; }
         .mobile .scene-chip.active {
-            background: var(--glass-bg-strong); border-color: var(--glass-border-strong);
-            box-shadow: var(--glass-shadow), var(--glass-inner-glow);
-            transform: scale(1.02);
+            background: var(--glass-bg-strong); border-color: var(--sage);
+            box-shadow: 0 4px 16px rgba(138,170,134,0.15), var(--glass-inner-glow);
+            transform: scale(1.03);
         }
 
-        .mobile .mobile-content { flex: 1; overflow-y: auto; padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 8px; }
-        .mobile .mobile-content::-webkit-scrollbar { display: none; }
+        /* Coach Strip */
         .mobile .mobile-coach-strip {
-            display: flex; gap: 6px; overflow-x: auto; padding: 2px 10px 7px; flex-shrink: 0;
+            display: flex; gap: 7px; overflow-x: auto; padding: 3px 14px 8px; flex-shrink: 0;
         }
         .mobile .mobile-coach-strip::-webkit-scrollbar { display: none; }
-        .mobile .mobile-coach-strip .coach-action { flex-shrink: 0; font-size: 10px; padding: 5px 10px; }
+        .mobile .mobile-coach-strip .coach-action {
+            flex-shrink: 0; font-size: 11px; padding: 6px 12px;
+            border-radius: 18px; letter-spacing: 0.3px;
+        }
 
+        /* Content Area */
+        .mobile .mobile-content { flex: 1; overflow-y: auto; padding: 8px 12px 12px; display: flex; flex-direction: column; gap: 10px; }
+        .mobile .mobile-content::-webkit-scrollbar { display: none; }
+
+        /* Mobile Flower Cards */
+        .mobile-flower-card {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 14px; border-radius: var(--radius-md);
+            background: var(--glass-bg); backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            cursor: pointer; transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .mobile-flower-card:active { transform: scale(0.98); background: var(--glass-bg-strong); }
+        .mobile-flower-card .flower-dot {
+            width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.04);
+        }
+        .mobile-flower-card .flower-info { flex: 1; min-width: 0; }
+        .mobile-flower-card .flower-name { font-size: 13px; font-weight: 650; color: var(--text); }
+        .mobile-flower-card .flower-meaning { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+        .mobile-flower-card .flower-arrow {
+            font-size: 14px; color: var(--text-muted); flex-shrink: 0;
+            transition: transform var(--transition);
+        }
+        .mobile-flower-card:active .flower-arrow { transform: translateX(2px); }
+
+        /* Mobile Script Cards */
+        .mobile-script-card {
+            padding: 14px 16px; border-radius: var(--radius-md);
+            background: var(--glass-bg); backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border); border-left: 3px solid var(--rose);
+            cursor: pointer; transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .mobile-script-card:active { transform: scale(0.98); background: var(--glass-bg-strong); }
+        .mobile-script-card .script-scene {
+            font-size: 8px; font-weight: 700; color: var(--sage);
+            letter-spacing: 2px; margin-bottom: 6px; text-transform: uppercase;
+        }
+        .mobile-script-card .script-context {
+            font-size: 10px; font-weight: 700; color: var(--rose);
+            letter-spacing: 1px; margin-bottom: 5px;
+        }
+        .mobile-script-card .script-preview {
+            font-size: 12px; color: var(--text-secondary); line-height: 1.7;
+            font-style: italic;
+        }
+
+        /* Section Labels */
+        .mobile-section-label {
+            font-size: 9px; letter-spacing: 3px; color: var(--text-muted);
+            font-weight: 700; padding: 4px 2px 2px; margin-top: 4px;
+        }
+
+        /* Bottom Tabs */
         .mobile .bottom-tabs {
             display: flex; border-top: 1px solid var(--glass-border); flex-shrink: 0;
             background: var(--glass-bg-strong); backdrop-filter: var(--blur-strong);
             -webkit-backdrop-filter: var(--blur-strong);
+            padding-bottom: env(safe-area-inset-bottom, 0);
         }
         .mobile .bottom-tab {
-            flex: 1; display: flex; align-items: center; justify-content: center;
-            padding: 10px 4px 14px; cursor: pointer; border: none;
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 3px; padding: 8px 4px 10px; cursor: pointer; border: none;
             background: transparent; font-family: inherit;
-            color: var(--text-muted); font-size: 11px; font-weight: 600;
-            letter-spacing: 1px; transition: all var(--transition);
+            color: var(--text-muted); font-size: 10px; font-weight: 600;
+            letter-spacing: 0.5px; transition: all var(--transition);
             position: relative;
         }
-        .mobile .bottom-tab.active { color: var(--sage); }
-        .mobile .bottom-tab.active::after {
-            content: ''; position: absolute; bottom: 8px; left: 30%; right: 30%;
-            height: 2px; background: var(--sage); border-radius: 1px;
+        .mobile .bottom-tab .tab-icon {
+            width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+            transition: all var(--transition);
         }
+        .mobile .bottom-tab .tab-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+        .mobile .bottom-tab.active { color: var(--sage); }
+        .mobile .bottom-tab.active .tab-icon { transform: scale(1.1); }
 
-        .mobile .mobile-input-row { display: flex; gap: 7px; padding: 5px 10px 7px; flex-shrink: 0; }
+        /* Input Row */
+        .mobile .mobile-input-row { display: flex; gap: 8px; padding: 6px 12px 8px; flex-shrink: 0; }
         .mobile .mobile-input-row input {
-            flex: 1; padding: 10px 14px; border-radius: 18px;
+            flex: 1; padding: 11px 16px; border-radius: 22px;
             border: 1px solid var(--glass-border-strong);
             background: var(--glass-bg-light); backdrop-filter: var(--blur);
             -webkit-backdrop-filter: var(--blur);
-            font-size: 12px; font-family: inherit; outline: none; color: var(--text);
+            font-size: 13px; font-family: inherit; outline: none; color: var(--text);
             transition: all var(--transition);
         }
-        .mobile .mobile-input-row input:focus { border-color: var(--sage); }
+        .mobile .mobile-input-row input:focus {
+            border-color: var(--sage);
+            box-shadow: 0 0 0 3px rgba(138,170,134,0.1);
+        }
         .mobile .mobile-input-row input::placeholder { color: var(--text-muted); }
         .mobile .mobile-input-row button {
-            padding: 10px 14px; border-radius: 18px;
-            border: 1px solid var(--sage);
+            padding: 11px 18px; border-radius: 22px;
+            border: none;
             background: linear-gradient(135deg, var(--sage) 0%, #7a9a76 100%);
             font-weight: 700; cursor: pointer; font-family: inherit;
-            font-size: 12px; color: #fff; white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(138,170,134,0.25);
-            letter-spacing: 0.5px;
+            font-size: 13px; color: #fff; white-space: nowrap;
+            box-shadow: 0 4px 14px rgba(138,170,134,0.3);
+            letter-spacing: 1px; transition: all var(--transition);
         }
+        .mobile .mobile-input-row button:active { transform: scale(0.95); }
+
+        /* Mobile Knowledge Cards */
+        .mobile .kc { padding: 16px 16px; margin: 2px 0; }
+        .mobile .kc .kc-title { font-size: 14px; }
+        .mobile .kc .kc-section p, .mobile .kc .kc-section li { font-size: 12px; line-height: 1.75; }
+
+        /* Mobile Script Cards (in chat) */
+        .mobile .script-card { padding: 12px 14px; margin: 5px 0; }
+        .mobile .script-card .script-text { font-size: 12px; line-height: 1.85; }
+
+        /* Mobile Messages */
+        .mobile .msg { max-width: 92%; }
+        .mobile .msg-bubble { padding: 12px 16px; font-size: 13px; line-height: 1.8; }
+
+        /* Mobile Copy Button - always visible on touch */
+        .mobile .copy-btn { opacity: 0.6; width: 30px; height: 30px; }
+        .mobile .msg .copy-btn { opacity: 0.6; }
+        .mobile .copy-btn.copied { opacity: 1; }
 
         /* ---- Copy Button ---- */
         .copy-btn {
@@ -605,7 +699,9 @@
         <h1>Flora AI</h1>
         <p class="tagline">花艺导购 · 话术培训</p>
     </div>
-    <div class="scene-strip" id="mobileSceneStrip"></div>
+    <div class="scene-strip-wrapper">
+        <div class="scene-strip" id="mobileSceneStrip"></div>
+    </div>
     <div class="mobile-coach-strip">
         <button class="coach-action" onclick="quickAsk('请根据当前场景生成一段高转化导购话术')">生成话术</button>
         <button class="coach-action" onclick="quickAsk('请扮演顾客和我练习销售对话')">模拟顾客</button>
@@ -622,23 +718,32 @@
         </div>
     </div>
     <div class="mobile-content" id="mobileTabKnowledge" style="display:none;">
-        <div class="ref-label">花语速查手册</div>
+        <div class="mobile-section-label">花语速查手册</div>
         <div id="mobileFlowerRef"></div>
     </div>
     <div class="mobile-content" id="mobileTabScripts" style="display:none;">
-        <div class="ref-label">话术模板库</div>
+        <div class="mobile-section-label">话术模板库</div>
         <div id="mobileScriptList"></div>
     </div>
 
     <div class="mobile-input-row" id="mobileInputRow">
         <input type="text" id="mobileInput" placeholder="描述顾客情况…" autocomplete="off">
-        <button onclick="mobileSend()">提问</button>
+        <button onclick="mobileSend()">发送</button>
     </div>
 
     <nav class="bottom-tabs">
-        <button class="bottom-tab active" data-tab="chat" onclick="switchMobileTab('chat')">对话培训</button>
-        <button class="bottom-tab" data-tab="knowledge" onclick="switchMobileTab('knowledge')">花语速查</button>
-        <button class="bottom-tab" data-tab="scripts" onclick="switchMobileTab('scripts')">话术模板</button>
+        <button class="bottom-tab active" data-tab="chat" onclick="switchMobileTab('chat')">
+            <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            对话培训
+        </button>
+        <button class="bottom-tab" data-tab="knowledge" onclick="switchMobileTab('knowledge')">
+            <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            花语速查
+        </button>
+        <button class="bottom-tab" data-tab="scripts" onclick="switchMobileTab('scripts')">
+            <span class="tab-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            话术模板
+        </button>
     </nav>
 </div>
 
@@ -1320,12 +1425,13 @@ function buildMobileSceneStrip() {
 
 function buildMobileFlowerRef() {
     document.getElementById('mobileFlowerRef').innerHTML = FLOWER_REF.map(f => `
-        <div class="glass" style="padding:10px 12px;display:flex;align-items:center;gap:9px;cursor:pointer;" onclick="quickAsk('${f.name}的花语是什么？怎么搭配？')">
-            <span class="ref-dot" style="background:${f.color};width:6px;height:6px;flex-shrink:0;"></span>
-            <div>
-                <div style="font-weight:650;font-size:12px;">${f.name}</div>
-                <div style="font-size:10px;color:var(--text-muted);">${f.meaning}</div>
+        <div class="mobile-flower-card" onclick="quickAsk('${f.name}的花语是什么？怎么搭配？')">
+            <span class="flower-dot" style="background:${f.color};"></span>
+            <div class="flower-info">
+                <div class="flower-name">${f.name}</div>
+                <div class="flower-meaning">${f.meaning}</div>
             </div>
+            <span class="flower-arrow">›</span>
         </div>
     `).join('');
 }
@@ -1333,11 +1439,12 @@ function buildMobileFlowerRef() {
 function buildMobileScriptList() {
     let h = '';
     for (const s of SCENES) {
-        h += `<div class="ref-label" style="margin-top:6px;">${s.name}</div>`;
+        h += `<div class="mobile-section-label" style="margin-top:8px;">${s.name}</div>`;
         h += s.scripts.map(sc => `
-            <div class="glass" style="padding:10px 12px;margin-bottom:5px;cursor:pointer;" onclick="selectScene('${s.id}');switchMobileTab('chat');">
-                <div style="font-size:8px;font-weight:700;color:var(--rose);letter-spacing:2px;margin-bottom:3px;">${sc.context}</div>
-                <div style="font-size:11px;color:var(--text-secondary);line-height:1.6;font-style:italic;">「${sc.text.substring(0, 70)}…」</div>
+            <div class="mobile-script-card" onclick="selectScene('${s.id}');switchMobileTab('chat');">
+                <div class="script-scene">${s.name}</div>
+                <div class="script-context">${sc.context}</div>
+                <div class="script-preview">「${sc.text.substring(0, 80)}…」</div>
             </div>
         `).join('');
     }
