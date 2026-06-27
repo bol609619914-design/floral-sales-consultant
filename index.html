@@ -102,7 +102,7 @@
 
         /* ---- App Shell ---- */
         .app-shell { position: relative; z-index: 1; display: none; min-height: 100vh; opacity: 0; }
-        .app-shell.ready { opacity: 1; transition: opacity 0.5s ease; }
+        .app-shell.ready { opacity: 1; transition: opacity 0.5s ease; will-change: opacity; }
 
         @media (min-width: 768px) {
             .app-shell.desktop { display: flex; }
@@ -175,6 +175,7 @@
             border: 1px solid transparent; background: transparent;
             font-family: inherit; font-size: 13px; color: var(--text);
             text-align: left; width: 100%; position: relative;
+            will-change: transform;
         }
         .scene-nav-item::before {
             content: ''; width: 2px; height: 0; border-radius: 2px;
@@ -247,7 +248,7 @@
         .chat-messages::-webkit-scrollbar { width: 4px; }
         .chat-messages::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
 
-        .msg { max-width: 88%; animation: msgIn 0.38s cubic-bezier(0.22, 0.61, 0.36, 1); }
+        .msg { max-width: 88%; animation: msgIn 0.38s cubic-bezier(0.22, 0.61, 0.36, 1); will-change: transform, opacity; }
         .msg.ai   { align-self: flex-start; }
         .msg.user { align-self: flex-end; }
         .msg-bubble { padding: 14px 18px; border-radius: var(--radius-md); line-height: 1.75; font-size: 13px; }
@@ -273,6 +274,7 @@
             box-shadow: var(--glass-shadow-lg), var(--glass-inner-glow);
             animation: cardIn 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
             transition: transform var(--transition), box-shadow var(--transition);
+            will-change: transform;
         }
         .kc:hover {
             transform: translateY(-2px);
@@ -302,6 +304,7 @@
             border-radius: var(--radius-sm); padding: 13px 15px; margin: 7px 0;
             border-left: 2px solid var(--rose);
             transition: transform var(--transition), box-shadow var(--transition);
+            will-change: transform;
         }
         .script-card:hover {
             transform: translateX(3px);
@@ -799,7 +802,8 @@ const API_CHAT_URL = '/api/chat';
 const CHAT_STORAGE_KEY = 'flora-chat-history';
 
 const $ = id => document.getElementById(id);
-const isDesktop = () => window.innerWidth >= 768;
+const _mqDesktop = window.matchMedia('(min-width: 768px)');
+const isDesktop = () => _mqDesktop.matches;
 const getScene = () => SCENES.find(s => s.id === currentSceneId) || null;
 
 // 关键词 → 场景 ID 的 Map，O(1) 查找
@@ -820,7 +824,12 @@ const SCENE_KEYWORDS = (() => {
 })();
 
 // ---- Chat History ----
+let _saveTimer = null;
 function saveHistory() {
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(_doSave, 300);
+}
+function _doSave() {
     const el = $('desktopChatMessages');
     if (!el) return;
     const msgs = [];
@@ -913,7 +922,7 @@ function respond(text) {
     const s = getScene();
     const d = findScene(text);
     if (d && d.id !== currentSceneId) {
-        currentSceneId = d.id; updateAllUI();
+        currentSceneId = d.id; updateActiveScene();
         return { intro: `已识别场景：<b>${d.name}</b><br><br>作为专业花艺导购，遇到这类顾客时您需要掌握以下核心知识：`, scene: d };
     }
     if (!s) return { text: '请先选择一个场景，或描述顾客情况（如「顾客想给女友道歉」），我会自动匹配。' };
@@ -1005,14 +1014,14 @@ function buildSceneNav() {
     const nav = $('desktopSceneNav');
     let h = '<div class="scene-nav-label">销售场景</div>';
     for (const s of SCENES) {
-        h += `<button class="scene-nav-item ${s.id === currentSceneId ? 'active' : ''}" onclick="selectScene('${s.id}')"><span class="scene-name">${s.name}</span><span class="scene-brief">${s.brief}</span></button>`;
+        h += `<button class="scene-nav-item ${s.id === currentSceneId ? 'active' : ''}" data-id="${s.id}" onclick="selectScene('${s.id}')"><span class="scene-name">${s.name}</span><span class="scene-brief">${s.brief}</span></button>`;
     }
     nav.innerHTML = h;
 }
 
 function buildSceneStrip() {
     $('mobileSceneStrip').innerHTML = SCENES.map(s =>
-        `<button class="scene-chip ${s.id === currentSceneId ? 'active' : ''}" onclick="selectScene('${s.id}')"><span class="chip-bar ${s.bar}"></span><span class="chip-label">${s.name}</span></button>`
+        `<button class="scene-chip ${s.id === currentSceneId ? 'active' : ''}" data-id="${s.id}" onclick="selectScene('${s.id}')"><span class="chip-bar ${s.bar}"></span><span class="chip-label">${s.name}</span></button>`
     ).join('');
 }
 
@@ -1090,13 +1099,13 @@ async function process(text) {
         }
     } finally {
         setSending(false);
-        updateAllUI();
+        updateActiveScene();
     }
 }
 
 // ---- Scene Select ----
 function selectScene(id) {
-    currentSceneId = id; updateAllUI();
+    currentSceneId = id; updateActiveScene();
     const s = getScene(); if (!s) return;
     const desktop = isDesktop();
     const container = desktop ? $('desktopChatMessages') : $('mobileTabChat');
@@ -1110,12 +1119,16 @@ function selectScene(id) {
     saveHistory();
 }
 
+function updateActiveScene() {
+    document.querySelectorAll('.scene-nav-item[data-id], .scene-chip[data-id]').forEach(el => {
+        el.classList.toggle('active', el.dataset.id === currentSceneId);
+    });
+    const s = getScene();
+    if (s) $('desktopHeaderTitle').textContent = s.name + ' · 导购话术培训';
+}
+
 function updateAllUI() {
-    if (isDesktop()) {
-        buildSceneNav();
-    } else {
-        buildSceneStrip();
-    }
+    buildSceneNav(); buildSceneStrip();
     const s = getScene();
     if (s) $('desktopHeaderTitle').textContent = s.name + ' · 导购话术培训';
 }
