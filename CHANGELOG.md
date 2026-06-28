@@ -1,5 +1,30 @@
 # 更新日志
 
+## [1.2.1] - 2026-06-23
+
+### 性能优化
+
+- **导航切换提速**：点击场景时只切换 active class，不再全量重建 innerHTML，响应更快
+- **isDesktop 去重排**：从 `window.innerWidth`（触发浏览器布局重排）改为 `matchMedia`（零重排）
+- **saveHistory 防抖**：加 300ms 防抖，连续消息不会频繁序列化 DOM
+- **transition 精确化**：所有 `transition: all` 替换为具体属性（background、transform、box-shadow 等），浏览器不再对不相关属性做无用计算
+- **GPU 合成层预分配**：给消息气泡、知识卡片、场景导航、话术卡片、应用外壳加 `will-change` 提示，动画期间不触发主线程重排
+
+### 动画丝滑度
+
+- **消息入场动画**：移除 `scale(0.97)` 缩放，只保留 `translateY(10px)`，消除微小缩放抖动感
+- **卡片入场动画**：移除 `scale(0.96)` 缩放，只保留 `translateY(14px)`
+- **场景导航**：hover 和 active 统一为 `translateX(2px)`，消除点击时的跳跃感
+
+### 代码清理
+
+- 删除未使用的 `--transition-slow` CSS 变量
+- 删除未使用的 `.desktop .main-content` CSS 类
+- `appendMsg` 复用 `COPY_ICON` 常量，消除重复内联 SVG
+- `process` 移除与 `respond` 重复的 `findScene` 调用
+
+---
+
 ## [1.2.0] - 2026-06-23
 
 ### 新增功能
