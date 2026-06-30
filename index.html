@@ -799,8 +799,6 @@ const FLOWER_REF = [
 let currentSceneId = null;
 let isSending = false;
 const API_CHAT_URL = '/api/chat';
-const CHAT_STORAGE_KEY = 'flora-chat-history';
-
 const $ = id => document.getElementById(id);
 const _mqDesktop = window.matchMedia('(min-width: 768px)');
 const isDesktop = () => _mqDesktop.matches;
@@ -823,45 +821,12 @@ const SCENE_KEYWORDS = (() => {
     return map;
 })();
 
-// ---- Chat History ----
-let _saveTimer = null;
-function saveHistory() {
-    clearTimeout(_saveTimer);
-    _saveTimer = setTimeout(_doSave, 300);
-}
-function _doSave() {
-    const el = $('desktopChatMessages');
-    if (!el) return;
-    const msgs = [];
-    el.querySelectorAll('.msg').forEach(m => {
-        const b = m.querySelector('.msg-bubble');
-        if (b) msgs.push({ html: b.innerHTML, ai: m.classList.contains('ai') });
-    });
-    try { localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(msgs)); } catch {}
-}
-
-function loadHistory() {
-    try {
-        const raw = localStorage.getItem(CHAT_STORAGE_KEY);
-        if (!raw) return;
-        const msgs = JSON.parse(raw);
-        if (!Array.isArray(msgs) || !msgs.length) return;
-        const container = isDesktop() ? $('desktopChatMessages') : $('mobileTabChat');
-        container.innerHTML = '';
-        for (const m of msgs) {
-            const div = document.createElement('div');
-            div.className = `msg ${m.ai ? 'ai' : 'user'}`;
-            div.innerHTML = `<div class="msg-bubble" style="position:relative;">${m.html}</div>`;
-            container.appendChild(div);
-        }
-        container.scrollTop = container.scrollHeight;
-    } catch {}
-}
-
+// ---- Clear Chat ----
+const WELCOME_DESKTOP = '<div class="msg ai"><div class="msg-bubble">欢迎使用 Flora AI <b>花艺导购话术培训系统</b>。<br><br>我是您的 AI 教练，帮助您掌握不同场景下的<b>花材推荐</b>、<b>花语解读</b>、<b>搭配技巧</b>和<b>推销话术</b>。<br><br>从左侧选择一个销售场景开始学习，或直接在下方输入顾客情况，我会即时生成知识卡片和话术模板。</div></div>';
+const WELCOME_MOBILE = '<div class="msg ai"><div class="msg-bubble">欢迎使用话术培训系统。<br><br>上方滑动选择销售场景，或直接输入顾客情况，我来教您怎么说。</div></div>';
 function clearChat() {
-    try { localStorage.removeItem(CHAT_STORAGE_KEY); } catch {}
-    $('desktopChatMessages').innerHTML = '<div class="msg ai"><div class="msg-bubble">欢迎使用 Flora AI <b>花艺导购话术培训系统</b>。<br><br>我是您的 AI 教练，帮助您掌握不同场景下的<b>花材推荐</b>、<b>花语解读</b>、<b>搭配技巧</b>和<b>推销话术</b>。<br><br>从左侧选择一个销售场景开始学习，或直接在下方输入顾客情况，我会即时生成知识卡片和话术模板。</div></div>';
-    $('mobileTabChat').innerHTML = '<div class="msg ai"><div class="msg-bubble">欢迎使用话术培训系统。<br><br>上方滑动选择销售场景，或直接输入顾客情况，我来教您怎么说。</div></div>';
+    $('desktopChatMessages').innerHTML = WELCOME_DESKTOP;
+    $('mobileTabChat').innerHTML = WELCOME_MOBILE;
 }
 
 // ---- Text Utils ----
@@ -993,7 +958,7 @@ function renderSceneCard(scene) {
 }
 
 // ---- Unified Message & Send ----
-function appendMsg(text, ai, opts = {}) {
+function appendMsg(text, ai) {
     const container = isDesktop() ? $('desktopChatMessages') : $('mobileTabChat');
     const div = document.createElement('div');
     div.className = `msg ${ai ? 'ai' : 'user'}`;
@@ -1001,7 +966,6 @@ function appendMsg(text, ai, opts = {}) {
     div.innerHTML = `<div class="msg-bubble" style="position:relative;">${ai ? text : escapeHTML(text)}${copyBtn}</div>`;
     container.appendChild(div);
     container.scrollTop = container.scrollHeight;
-    if (!opts.skipSave) saveHistory();
 }
 
 function sendMessage() {
@@ -1095,7 +1059,6 @@ async function process(text) {
             const card = document.createElement('div'); card.className = 'msg ai';
             card.innerHTML = renderSceneCard(r.scene);
             container.appendChild(card); container.scrollTop = container.scrollHeight;
-            saveHistory();
         } else if (r.scene && r.showScripts) {
             const sh = r.scene.scripts.map(s => `<div class="script-card"><div class="script-label">话术 · ${s.context}</div><div class="script-text">「${s.text}」</div></div>`).join('');
             appendMsg(`<b>${r.scene.name}</b> 场景推销话术模板：<br><br>${sh}`, true);
@@ -1117,11 +1080,10 @@ function selectScene(id) {
     container.innerHTML = '';
     if (desktop) $('desktopHeaderTitle').textContent = s.name + ' · 导购话术培训';
     else switchMobileTab('chat');
-    appendMsg(`已选择场景：<b>${s.name}</b><br><br>${s.brief}<br><br>以下是该场景的<b>花材推荐</b>、<b>花语解读</b>、<b>搭配方案</b>和<b>推销话术</b>：`, true, { skipSave: true });
+    appendMsg(`已选择场景：<b>${s.name}</b><br><br>${s.brief}<br><br>以下是该场景的<b>花材推荐</b>、<b>花语解读</b>、<b>搭配方案</b>和<b>推销话术</b>：`, true);
     const card = document.createElement('div'); card.className = 'msg ai';
     card.innerHTML = renderSceneCard(s);
     container.appendChild(card); container.scrollTop = container.scrollHeight;
-    saveHistory();
 }
 
 function updateActiveScene() {
@@ -1169,7 +1131,6 @@ function init() {
     $('desktopInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } });
     $('mobileInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); sendMessage(); } });
     if (!isDesktop()) switchMobileTab('chat');
-    loadHistory();
 }
 
 // ---- Global Exports ----
