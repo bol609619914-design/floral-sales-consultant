@@ -984,7 +984,12 @@ function renderSceneCard(scene) {
                 <ul>${scene.avoid.map(a => `<li>${a}</li>`).join('')}</ul>
             </div>
         </div>
-        <div class="msg ai"><div class="msg-bubble"><b>练习建议</b>：试着在输入框中模拟这个场景的顾客对话，例如输入「${scene.customerAsk}」，我来扮演顾客陪您练习话术。</div></div>`;
+        <div class="kc">
+            <div class="kc-section">
+                <div class="kc-section-label">练习建议</div>
+                <p class="kc-flower-info">试着输入「${scene.customerAsk}」，我来扮演顾客陪您练习话术。</p>
+            </div>
+        </div>`;
 }
 
 // ---- Unified Message & Send ----
